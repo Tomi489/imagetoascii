@@ -49,45 +49,23 @@ for i in primes1:
 print("The amount of downscaling can be one of these numbers or the multiplication of them:")
 print(primes)
 leméretezés=int(input("How many times do you want to downscale the image? (maximum 100): "))
-print("What y transform do you want to use to counteract the stretching of the characters?")
-num=int(input("y transform: "))
+ytrans=2.5
+new_height=int(round(matrix.shape[0]/ytrans))/leméretezés
 
-x=matrix.shape[1]/leméretezés;
-y=matrix.shape[0]/leméretezés;
-print(x, y)
+print(leméretezés, new_height, matrix.shape[1]/leméretezés);
 
-extrastep=int(matrix.shape[0]/((matrix.shape[0]-matrix.shape[0]%(num*leméretezés))/num/leméretezés))
-db=int(matrix.shape[0]%(num*leméretezés))
-print(extrastep, db)
+xstep=leméretezés
+ystep=int(round(matrix.shape[0]/new_height))
+print(xstep, ystep)
 
-if db==0:
-    for i in range(0, matrix.shape[0], int(leméretezés)):
-        for j in range(0, matrix.shape[1], int(leméretezés)):
-            avg = 0
-            for k in range(int(leméretezés)):
-                for l in range(int(leméretezés)):
-                    avg += matrix[i + k][j + l]
-            printer(avg / (leméretezés  * leméretezés))
-        print()
-
-# kellene db darabszor extrastep+1 méretű sort átlagolni, majd utána simán extrastep méretű sort átlagolni de fasz tudja már mi történik itt legjobb lenne újraírni a végét
-while db>0:
-    for i in range(db*extrastep, extrastep+1):
-        for j in range(0, matrix.shape[1], int(leméretezés)):
-            avg = 0
-            for k in range(int(extrastep+1)):
-                for l in range(int(leméretezés)):
-                    avg += matrix[i + k][j + l]
-            printer(avg / ((extrastep+1)  * leméretezés))
-        print()
-    db=db-1
-
-for i in range(db*extrastep, matrix.shape[0], extrastep):
-    for j in range(0, matrix.shape[1], int(leméretezés)):
-        avg = 0
-        for k in range(int(extrastep)):
-            for l in range(int(leméretezés)):
-                avg += matrix[i + k][j + l]
-        printer(avg / (leméretezés  * leméretezés))
+for y in range(0, matrix.shape[0], ystep):
+    for x in range(0, matrix.shape[1], xstep):
+        avg=0
+        for i in range(ystep):
+            for j in range(xstep):
+                avg+=matrix[y+i][x+j]
+        avg=avg/(xstep*ystep)
+        printer(avg)
     print()
 
+    
